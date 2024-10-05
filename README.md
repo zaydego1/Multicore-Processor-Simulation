@@ -1,1 +1,1 @@
-# Multiple-Processor-Simulation
+# Multicore-Processor-Simulation
