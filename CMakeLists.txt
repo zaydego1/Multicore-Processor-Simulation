@@ -8,15 +8,16 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 #Add the source files for the project 
-
 set(SOURCES 
     src/cache.cpp
     src/memory.cpp
+    src/processor.cpp
 )
 #Add the header files for the project 
 set(HEADERS
     include/cache.h
     include/memory.h
+    include/processor.h
 )
 
 #Create an executable 
