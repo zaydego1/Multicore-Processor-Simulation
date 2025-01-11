@@ -8,6 +8,7 @@
    - It can also include mechanisms for handling pipeline execution if you're simulating a pipelined processor.
    - 
 
+
 2. **`cache.cpp`**:
    - Implements cache memory for each core.
    - Includes cache lookup, handling cache hits and misses, and cache replacement policies (e.g., LRU).
