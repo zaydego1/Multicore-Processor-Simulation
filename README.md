@@ -6,7 +6,6 @@
    - This file simulates the behavior of each processor core.
    - It fetches instructions, executes them, and handles the interaction with the cache/memory system.
    - It can also include mechanisms for handling pipeline execution if you're simulating a pipelined processor.
-   - Worked on by Isaiah (for ticket explanation)
 
 2. **`cache.cpp`**:
    - Implements cache memory for each core.
