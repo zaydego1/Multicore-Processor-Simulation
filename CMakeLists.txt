@@ -21,13 +21,13 @@ set(HEADERS
 )
 
 #Create an executable 
-add_executable(MulticoreSim ${SOURCES} main.cpp)
+add_executable(MulticoreProcessorSimulation ${SOURCES} src/main.cpp)
 
 #Include directories for header files
-target_include_directories(MulticoreSim PRIVATE include)
+target_include_directories(MulticoreProcessorSimulation PRIVATE include)
 
 #optional : add compiler warnings 
-target_compile_options(MulticoreSim PRIVATE -Wall -Wextra -pedantic)
+target_compile_options(MulticoreProcessorSimulation PRIVATE -Wall -Wextra -pedantic)
 
 #optional: Enable debug symbols for debuggin
 set(CMAKE_BUILD_TYPE Debug)

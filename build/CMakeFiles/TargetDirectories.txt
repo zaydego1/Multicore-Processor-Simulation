@@ -1,0 +1,3 @@
+C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation/build/CMakeFiles/MulticoreProcessorSimulation.dir
+C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation/build/CMakeFiles/ZERO_CHECK.dir
