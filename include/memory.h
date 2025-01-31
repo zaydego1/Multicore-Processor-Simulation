@@ -4,14 +4,14 @@
 #include <unordered_map>
 #include <string>
 
-class Memory{
+class Memory {
 
     public:
         //memory operations 
-        std::string read(int address);
-        void write (int address,const std:: string& address);
+        std::string read(std::string address);
+        void write (std::string address,const std:: string& address);
         void displayMemoryState() const;
     private:
-        std::unordered_map<int,std::string> memory;
+        std::unordered_map<std::string, std::string> memory;
 }
-#ifndef // MEMORY_H
+#endif // MEMORY_H

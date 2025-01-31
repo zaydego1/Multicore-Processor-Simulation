@@ -1,0 +1,60 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"extern/easyloggingpp/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 38,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 47,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "dev",
+			"destination" : "C:/Program Files/MulticoreProcessorSimulation/include",
+			"paths" : 
+			[
+				"extern/easyloggingpp/src/easylogging++.h",
+				"extern/easyloggingpp/src/easylogging++.cc"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "C:/Program Files/MulticoreProcessorSimulation/share/pkgconfig",
+			"paths" : 
+			[
+				"build/extern/easyloggingpp/easyloggingpp.pc"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "extern/easyloggingpp",
+		"source" : "extern/easyloggingpp"
+	}
+}

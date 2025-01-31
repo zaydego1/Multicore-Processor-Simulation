@@ -1,0 +1,4 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.31/Modules/CheckIncludeFileCXX.cmake
+C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation/extern/easyloggingpp/CMakeLists.txt
+C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation/extern/easyloggingpp/cmake/easyloggingpp.pc.cmakein
