@@ -1,6 +1,0 @@
-Name: easyloggingpp
-Description: Feature-rich single header C++ logging library
-Version: 9.96.7
-prefix=C:/Program Files/MulticoreProcessorSimulation
-includedir=C:/Program Files/MulticoreProcessorSimulation/include
-Cflags: -I${includedir}
