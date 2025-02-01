@@ -10,24 +10,30 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 #Add the source files for the project 
 set(SOURCES 
     src/cache.cpp
-    src/memory.cpp
     src/processor.cpp
+    src/node.cpp
 )
 #Add the header files for the project 
 set(HEADERS
     include/cache.h
-    include/memory.h
     include/processor.h
+    include/node.h
+    include/easylogging++.h
+    include INSTRUCTION_ENUM.h
 )
 
+
+#make logging thread safe
+add_definitions(-DELPP_THREAD_SAFE)  # Enable thread safety if needed
+add_definitions(-DELPP_NO_DEFAULT_LOG_FILE) 
+
+
 #Create an executable 
-add_executable(MulticoreProcessorSimulation ${SOURCES} src/main.cpp)
+add_executable(MulticoreProcessorSimulation ${SOURCES} src/main.cpp lib/easylogging++.cc)
 
 #Include directories for header files
+add_subdirectory(extern/easyloggingpp)
 target_include_directories(MulticoreProcessorSimulation PRIVATE include)
-
-#optional : add compiler warnings 
-target_compile_options(MulticoreProcessorSimulation PRIVATE -Wall -Wextra -pedantic)
 
 #optional: Enable debug symbols for debuggin
 set(CMAKE_BUILD_TYPE Debug)

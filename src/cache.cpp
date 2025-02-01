@@ -1,4 +1,6 @@
 #include "cache.h"
+#include "node.h"
+#include <easylogging++.h>
 #include <iostream>
 
 /**
@@ -6,13 +8,27 @@
  * It calculates the number of sets and initializes the cache lines.
  *
  * @param size - Total size of the cache in bytes.
- * @param lineSize - Size of each cache line in bytes.
- * @param associativity - Number of lines per set (e.g., 2 for 2-way associative).
  */
-Cache::Cache(int size, int lineSize, int associativity)
-    : size(size), lineSize(lineSize), associativity(associativity) {
-    int numSets = (size / (lineSize * associativity));
-    cacheLines.resize(numSets, std::vector<CacheLine>(associativity, {0, false, ""}));
+Cache::Cache(int size) : size(size), head(nullptr), cacheMap(std::unordered_map<std::string, Node*>()) {
+    LOG(INFO) << "Cache initialized with size: " << size << "\n";
+}
+
+/**
+ * @brief Destructor for the Cache class.
+ *
+ * This destructor is responsible for cleaning up the linked list of Node objects
+ * and clearing the cacheMap. It iterates through the linked list starting from
+ * the head, deleting each Node to free up memory. After all nodes are deleted,
+ * it clears the cacheMap to ensure all resources are properly released.
+ */
+Cache::~Cache() {
+    Node* curr = head;
+    while (curr) {
+        Node* temp = curr;
+        curr = curr->next;
+        delete temp;
+    }
+    cacheMap.clear();
 }
 
 /**
@@ -21,105 +37,74 @@ Cache::Cache(int size, int lineSize, int associativity)
  * @param address - The memory address to look up.
  * @return true if the address is found in the cache (hit), false otherwise (miss).
  */
-bool Cache::lookup(int address) {
-    int index = getIndex(address);
-    int tag = getTag(address);
-
-    for (auto& line : cacheLines[index]) {
-        if (line.valid && line.tag == tag) {
-            std::cout << "Cache hit at address: " << address << "\n";
-            return true;
-        }
+bool Cache::lookup(std::string address) const {
+    try {
+        cacheMap.at(address);
+        return true;
+    } catch (const std::out_of_range& e) {
+        LOG(INFO) << "Cache miss at address: " << address << "\n";
     }
-
-    std::cout << "Cache miss at address: " << address << "\n";
     return false;
 }
 
-/**
- * Updates the cache with a new address and its associated data.
- * If the address is not found in the cache, it replaces a cache line.
- *
- * @param address - The memory address to update.
- * @param data - The data to store in the cache line.
- */
-void Cache::update(int address, const std::string& data) {
-    int index = getIndex(address);
-    int tag = getTag(address);
 
-    // Replace a line in the set with the new data
-    replaceLine(index, tag, data);
-}
+std::string Cache::read(std::string address) {
+    if (!lookup(address)) return "";
 
-/**
- * Replaces a cache line within the given set index.
- * Uses a simple replacement policy (e.g., replaces the first available line or the first line in the set).
- *
- * @param index - The set index where the replacement should occur.
- * @param tag - The tag associated with the new data.
- * @param data - The data to store in the cache line.
- */
-void Cache::replaceLine(int index, int tag, const std::string& data) {
-    for (auto& line : cacheLines[index]) {
-        if (!line.valid) {
-            line.tag = tag;
-            line.valid = true;
-            line.data = data;
-            return;
-        }
+    Node* node = cacheMap[address];
+    if (!node || node->data.empty()) {
+        cacheMap.erase(address);  // Remove invalid entry
+        delete node;
+        return "";
     }
 
-    // If all lines are valid, replace the first line (simple replacement policy)
-    cacheLines[index][0] = {tag, true, data};
+    // If node is already head, return early
+    if (node == head) return node->data;
+
+    // Detach node from current position
+    if (node->prev) node->prev->next = node->next;
+    if (node->next) node->next->prev = node->prev;
+
+    // Attach at head
+    node->prev = nullptr;
+    node->next = head;
+    if (head) head->prev = node;
+    head = node;
+
+    return node->data;
 }
 
-/**
- * Displays the current state of the cache, including each set and its cache lines.
- */
-void Cache::displayCacheState() const {
-    for (size_t i = 0; i < cacheLines.size(); ++i) {
-        std::cout << "Set " << i << ": ";
-        for (const auto& line : cacheLines[i]) {
-            if (line.valid) {
-                std::cout << "[Tag: " << line.tag << ", Data: " << line.data << "] ";
-            } else {
-                std::cout << "[Invalid] ";
-            }
-        }
-        std::cout << "\n";
+void Cache::insert(std::string address, const std::string& data) {
+    if (cacheMap.size() >= size) {
+        Node::removeFromEnd(head, cacheMap); 
+    } // Evict before inserting
+
+    Node* newNode = new Node(address, data);
+    cacheMap[address] = newNode;
+
+    newNode->next = head;
+    if (head) head->prev = newNode;
+    head = newNode;
+}
+
+void Cache::update(std::string address, const std::string& data) {
+    try {
+        cacheMap.at(address);
+        std::string oldData = cacheMap[address]->data;
+        cacheMap[address]->data = data;
+        LOG(INFO) << "Node updated at address: " << address << "\n. Old data: " << oldData << "\n. New data: " << data << "\n";
+    } catch (const std::out_of_range& e) {
+        LOG(INFO) << "Node not found at address: " << address << ". Inserting new node... \n";
+        insert(address, data);
+        return;
     }
 }
 
-/**
- * Extracts the tag from a given memory address.
- *
- * @param address - The memory address to extract the tag from.
- * @return The tag part of the address.
- */
-int Cache::getTag(int address) const {
-    return address / (lineSize * cacheLines.size());
+void Cache::display() const {
+    LOG(INFO) << "Cache state (MRU to LRU):";
+    Node* curr = head;
+    while (curr) {
+        LOG(INFO) << "Address: " << curr->address << " Data: " << curr->data;
+        curr = curr->next;
+    }
 }
-
-/**
- * Extracts the set index from a given memory address.
- *
- * @param address - The memory address to extract the index from.
- * @return The set index part of the address.
- */
-int Cache::getIndex(int address) const {
-    return (address / lineSize) % cacheLines.size();
-}
-
-/**
- * Extracts the offset within a cache line from a given memory address.
- *
- * @param address - The memory address to extract the offset from.
- * @return The offset part of the address.
- */
-int Cache::getOffset(int address) const {
-    return address % lineSize;
-}
-
-
-
-

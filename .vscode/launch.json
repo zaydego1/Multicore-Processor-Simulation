@@ -4,6 +4,23 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
+        {
+            "name": "CMake: Debug",
+            "type": "node",
+            "request": "launch",
+            "program": "C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation/build/MulticoreProcessorSimulation",
+            "args": [],
+            "cwd": "C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation",
+            "preLaunchTask": "CMake: Build project"
+        },
+        {
+            "name": "CMake: Build project",
+            "type": "cmake",
+            "request": "launch",
+            "cmakeDebugType": "configure"
+            },
+
         {
             "type": "cmake",
             "request": "launch",
