@@ -7,15 +7,16 @@
         
         {
             "name": "CMake: Debug",
-            "type": "node",
+            "type": "cppdbg",
             "request": "launch",
-            "program": "C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation/build/MulticoreProcessorSimulation",
+            "program": "C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation/build/Debug/MulticoreProcessorSimulation.exe", //replace with your path!!
             "args": [],
-            "cwd": "C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation",
-            "preLaunchTask": "CMake: Build project"
+            "cwd": "C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation", //replace with your path!
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+            "preLaunchTask": "CMake: Build project",
         },
         {
-            "name": "CMake: Build project",
+            "name": "CMake: Build project", //this is the name to match with the task in tasks.json
             "type": "cmake",
             "request": "launch",
             "cmakeDebugType": "configure"

@@ -3,24 +3,10 @@
 #include <easylogging++.h>
 #include <iostream>
 
-/**
- * Constructor to initialize the cache with the given size, line size, and associativity.
- * It calculates the number of sets and initializes the cache lines.
- *
- * @param size - Total size of the cache in bytes.
- */
 Cache::Cache(int size) : size(size), head(nullptr), cacheMap(std::unordered_map<std::string, Node*>()) {
     LOG(INFO) << "Cache initialized with size: " << size << "\n";
 }
 
-/**
- * @brief Destructor for the Cache class.
- *
- * This destructor is responsible for cleaning up the linked list of Node objects
- * and clearing the cacheMap. It iterates through the linked list starting from
- * the head, deleting each Node to free up memory. After all nodes are deleted,
- * it clears the cacheMap to ensure all resources are properly released.
- */
 Cache::~Cache() {
     Node* curr = head;
     while (curr) {
@@ -31,18 +17,12 @@ Cache::~Cache() {
     cacheMap.clear();
 }
 
-/**
- * Checks if the given address is present in the cache (cache hit or miss).
- *
- * @param address - The memory address to look up.
- * @return true if the address is found in the cache (hit), false otherwise (miss).
- */
 bool Cache::lookup(std::string address) const {
     try {
         cacheMap.at(address);
         return true;
     } catch (const std::out_of_range& e) {
-        LOG(INFO) << "Cache miss at address: " << address << "\n";
+        LOG(INFO) << "Cache miss at address: " << address;
     }
     return false;
 }
@@ -92,9 +72,9 @@ void Cache::update(std::string address, const std::string& data) {
         cacheMap.at(address);
         std::string oldData = cacheMap[address]->data;
         cacheMap[address]->data = data;
-        LOG(INFO) << "Node updated at address: " << address << "\n. Old data: " << oldData << "\n. New data: " << data << "\n";
+        LOG(INFO) << "Node updated at address: " << address << "\n. Old data: " << oldData << "\n. New data: " << data;
     } catch (const std::out_of_range& e) {
-        LOG(INFO) << "Node not found at address: " << address << ". Inserting new node... \n";
+        LOG(INFO) << "Node not found at address: " << address << ". Inserting new node...";
         insert(address, data);
         return;
     }
