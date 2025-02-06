@@ -1,16 +1,18 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "cmake",
-			"label": "CMake: build",
-			"command": "build",
-			"targets": [
-				"ALL_BUILD"
-			],
-			"group": "build",
-			"problemMatcher": [],
-			"detail": "CMake template build task"
-		}
-	]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CMake: Build project", // Must match the name in launch.json
+            "type": "shell",
+            "command": "cmake --build C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation/build --config Debug", //replace with your path! 
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "options": {
+                "cwd": "C:/Users/sayza/VSCodeProjects/Multiple-Processor-Simulation" //replace with your path!
+            }
+        }
+    ]
 }
