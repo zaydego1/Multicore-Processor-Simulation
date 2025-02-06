@@ -4,7 +4,9 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include <iostream>
 #include "node.h"
+#include "easylogging++.h"
 
 class Cache {
 

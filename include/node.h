@@ -1,5 +1,6 @@
 #ifndef NODE_H_
 #define NODE_H_
+
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -8,7 +9,7 @@
  * @class Node
  * @brief Represents a node in a doubly linked list.
  *
- * The Node class is used to store data and maintain links to the previous and next nodes
+ * The Node class is used to store data, data addresses and maintain links to the previous and next nodes
  * in a doubly linked list. It also includes a static method to remove a node from the end
  * of the list.
  */

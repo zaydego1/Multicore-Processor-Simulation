@@ -1,7 +1,5 @@
 #include "cache.h"
 #include "node.h"
-#include <easylogging++.h>
-#include <iostream>
 
 Cache::Cache(int size) : size(size), head(nullptr), cacheMap(std::unordered_map<std::string, Node*>()) {
     LOG(INFO) << "Cache initialized with size: " << size << "\n";
