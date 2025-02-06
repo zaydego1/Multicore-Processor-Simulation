@@ -14,13 +14,14 @@ class Core
 {
 public:
     Core(int coreId, int l1CacheSize, Cache &l2Cache);
+    int coreId;
 
     bool isReady();
     void executeInstruction(const std::string &instruction);
+    void displayCacheState() const;
 
 private:
     bool readyForInstruction;
-    int coreId;
     Cache l1Cache;
     Cache &l2Cache;
 

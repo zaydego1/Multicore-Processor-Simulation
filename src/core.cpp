@@ -63,7 +63,10 @@ void Core::handleLoadInstruction(const std::vector<std::string>& tokens) {
     } else if (l2Cache.lookup(address)) {
         LOG(INFO) << "l2Cache hit for address: " << address;
         l1Cache.insert(address, l2Cache.read(address));
+        l2Cache.remove(address);
         memStack.push(address);
+    } else {
+        LOG(INFO) << "Cache miss for address: " << address;
     }
 }
 
@@ -105,4 +108,14 @@ void Core::handleAddInstruction() {
         LOG(ERROR) << "Out of range error for ADD operation: " << e.what();
     }
 }
+
+void Core::displayCacheState() const {
+    LOG(INFO) << "Displaying cache state for Core " << coreId;
+    LOG(INFO) << "L1 Cache:";
+    l1Cache.display();
+    LOG(INFO) << "L2 Cache:";
+    l2Cache.display();
+}
+
+
 

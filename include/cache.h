@@ -7,6 +7,7 @@
 #include <iostream>
 #include "node.h"
 #include "easylogging++.h"
+#include <mutex>
 
 class Cache {
 
@@ -17,7 +18,7 @@ class Cache {
         * 
         * @param size The size of the cache.
         */ 
-        Cache(int size);
+        Cache(int& size);
 
         /**
         * @brief Destroy the Cache object and release any allocated resources.
@@ -57,14 +58,25 @@ class Cache {
         void update (std::string address, const std::string& data);
 
         /**
+         * @brief Removes the cache entry associated with the given address.
+         * 
+         * This method searches for the cache entry corresponding to the specified
+         * address and removes it from the cache if it exists.
+         * 
+         * @param address The address of the cache entry to be removed.
+         */
+        void remove(std::string address);
+
+        /**
         * @brief Display the contents of the cache.
          */
         void display() const;
 
 
     private:
-        int size; //size of the cache
+        int& size; //size of the cache
         Node* head; //pointer to the head of the linked list
+        std::mutex cacheMutex; //mutex to protect cache operations
         std::unordered_map<std::string, Node*> cacheMap; //map to store cache entries
 
 };

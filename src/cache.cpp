@@ -1,8 +1,8 @@
 #include "cache.h"
 #include "node.h"
 
-Cache::Cache(int size) : size(size), head(nullptr), cacheMap(std::unordered_map<std::string, Node*>()) {
-    LOG(INFO) << "Cache initialized with size: " << size << "\n";
+Cache::Cache(int& size) : size(size), head(nullptr), cacheMap(std::unordered_map<std::string, Node*>()) {
+    LOG(INFO) << "Cache initialized with size: " << size;
 }
 
 Cache::~Cache() {
@@ -25,8 +25,8 @@ bool Cache::lookup(std::string address) const {
     return false;
 }
 
-
 std::string Cache::read(std::string address) {
+    std::lock_guard<std::mutex> lock(cacheMutex);
     if (!lookup(address)) return "";
 
     Node* node = cacheMap[address];
@@ -53,9 +53,16 @@ std::string Cache::read(std::string address) {
 }
 
 void Cache::insert(std::string address, const std::string& data) {
+    std::lock_guard<std::mutex> lock(cacheMutex);
     if (cacheMap.size() >= size) {
         Node::removeFromEnd(head, cacheMap); 
-    } // Evict before inserting
+    }
+
+    if (lookup(address)) {
+        LOG(INFO) << "Node already exists at address: " << address << ". Updating data...";
+        update(address, data);
+        return;
+    }
 
     Node* newNode = new Node(address, data);
     cacheMap[address] = newNode;
@@ -66,6 +73,7 @@ void Cache::insert(std::string address, const std::string& data) {
 }
 
 void Cache::update(std::string address, const std::string& data) {
+    std::lock_guard<std::mutex> lock(cacheMutex);
     try {
         cacheMap.at(address);
         std::string oldData = cacheMap[address]->data;
@@ -78,8 +86,23 @@ void Cache::update(std::string address, const std::string& data) {
     }
 }
 
+void Cache::remove(std::string address) {
+    std::lock_guard<std::mutex> lock(cacheMutex);
+    try {
+        cacheMap.at(address);
+        Node* node = cacheMap[address];
+        if (node->prev) node->prev->next = node->next;
+        if (node->next) node->next->prev = node->prev;
+        if (node == head) head = node->next;
+        cacheMap.erase(address);
+        delete node;
+        LOG(INFO) << "Node removed at address: " << address;
+    } catch (const std::out_of_range& e) {
+        LOG(INFO) << "Node not found at address: " << address;
+    }
+}
+
 void Cache::display() const {
-    LOG(INFO) << "Cache state (MRU to LRU):";
     Node* curr = head;
     while (curr) {
         LOG(INFO) << "Address: " << curr->address << " Data: " << curr->data;
