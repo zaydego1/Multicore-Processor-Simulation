@@ -1,10 +1,8 @@
 #include "cpu.h"
 #include "processor.h"
 
-CPU::CPU(int numOfProcessors, int numOfCores, int l1CacheSize, int l2CacheSize) :
-    numOfProcessors(numOfProcessors), numOfCores(numOfCores), 
-    l1CacheSize(l1CacheSize), l2CacheSize(l2CacheSize) {
-}
+CPU::CPU(int numOfProcessors, int numOfCores, int l1CacheSize, int l2CacheSize, Memory& memory) :
+    numOfProcessors(numOfProcessors), numOfCores(numOfCores), l1CacheSize(l1CacheSize), l2CacheSize(l2CacheSize), memory(memory) {}
 
 void CPU::run() {
     LOG(INFO) << "CPU is running...";
@@ -38,6 +36,6 @@ void CPU::loadInstructionQueue(std::vector<std::string>& instructions) {
 void CPU::initializeProcessors() {
     for (int i = 1; i <= numOfProcessors; ++i) {
         LOG(INFO) << "Initializing processor " << i;
-        processors.insert({i, std::shared_ptr<Processor>(new Processor(i, numOfCores, l1CacheSize, l2CacheSize))});
+        processors.insert({i, std::shared_ptr<Processor>(new Processor(i, numOfCores, l1CacheSize, l2CacheSize, memory))});
     }
 }

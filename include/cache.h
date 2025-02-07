@@ -7,7 +7,7 @@
 #include <iostream>
 #include "node.h"
 #include "easylogging++.h"
-#include <mutex>
+#include <shared_mutex>
 
 class Cache {
 
@@ -77,7 +77,7 @@ class Cache {
     private:
         int size; //size of the cache
         Node* head; //pointer to the head of the linked list
-        std::mutex cacheMutex; //mutex to protect cache operations
+        std::shared_mutex cacheMutex; //mutex to protect cache operations
         std::unordered_map<std::string, Node*> cacheMap; //map to store cache entries
 
 };

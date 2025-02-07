@@ -1,38 +1,42 @@
 #include "memory.h"
-#include <iostream>
 
-/**
- * Reads data from the specified memory address.
- *
- * @param address - The memory address to read from.
- * @return The data stored at the given address. Returns an empty string if the address is not found.
- */
-std::string Memory::read(int address) {
-    if (memoryStore.find(address) != memoryStore.end()) {
-        std::cout << "Memory read at address: " << address << "\n";
-        return memoryStore[address];
-    } else {
-        std::cout << "Memory read miss at address: " << address << "\n";
-        return "";
-    }
+#include "easylogging++.h"
+
+Memory::Memory() : memory() {
+    LOG(INFO) << "Memory initialized.";
 }
 
-/**
- * Writes data to the specified memory address.
- *
- * @param address - The memory address to write to.
- * @param data - The data to store at the given address.
- */
-void Memory::write(int address, const std::string& data) {
-    memoryStore[address] = data;
-    std::cout << "Memory write at address: " << address << " with data: " << data << "\n";
+
+std::string Memory::get(std::string &key) {
+    std::shared_lock<std::shared_mutex> lock(mutex_); // Shared lock for reading
+    if (!contains(key)) {
+        throw std::invalid_argument("Key not found in memory");
+    }
+    Node* node = memory[key];
+    return node->data;
 }
 
-/**
- * Displays the current state of the memory, showing all stored addresses and their data.
- */
-void Memory::displayMemoryState() const {
-    for (const auto& [address, data] : memoryStore) {
-        std::cout << "Address: " << address << ", Data: " << data << "\n";
-    }
+void Memory::insert(std::string &key, Node* value) {
+    std::unique_lock<std::shared_mutex> lock(mutex_);
+    memory[key] = value;
+}
+
+void Memory::update(std::string &key, Node* value) {
+    std::unique_lock<std::shared_mutex> lock(mutex_);
+    memory[key] = value;
+}
+
+void Memory::remove(std::string &key) {
+    std::unique_lock<std::shared_mutex> lock(mutex_);
+    memory.erase(key);
+}
+
+size_t Memory::size() {
+    std::shared_lock<std::shared_mutex> lock(mutex_); 
+    return memory.size();
+}
+
+bool Memory::contains(std::string &key) {
+    std::shared_lock<std::shared_mutex> lock(mutex_); 
+    return memory.count(key) > 0;
 }

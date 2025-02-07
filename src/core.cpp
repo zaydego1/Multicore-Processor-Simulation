@@ -1,8 +1,7 @@
 #include "core.h"
 
-Core::Core(int id, int l1, Cache& l2) 
-    : coreId(id), l1CacheSize(l1), l1Cache(l1CacheSize), l2Cache(l2),
-    readyForInstruction(true) {}
+Core::Core(int id, int l1, Cache& l2, Memory& memory) 
+    : coreId(id), l1CacheSize(l1), l1Cache(l1CacheSize), l2Cache(l2), readyForInstruction(true), memory(memory) {}
 
 bool Core::isReady() {
     return readyForInstruction;
@@ -68,8 +67,15 @@ void Core::handleLoadInstruction(const std::vector<std::string>& tokens) {
         l1Cache.insert(address, l2Cache.read(address));
         l2Cache.remove(address);
         memStack.push(address);
+    } else if (memory.contains(address)) {
+        LOG(INFO) << "Memory hit for address: " << address;
+        l1Cache.insert(address, memory.get(address));
+        memStack.push(address);
     } else {
-        LOG(INFO) << "Cache miss for address: " << address;
+        LOG(INFO) << "l1Cache miss for address: " << address;
+        LOG(INFO) << "l2Cache miss for address: " << address;
+        LOG(INFO) << "Memory miss for address: " << address;
+        LOG(INFO) << "Data not found for address: " << address;
     }
 }
 
@@ -89,7 +95,9 @@ void Core::handleStoreInstruction(const std::vector<std::string>& tokens) {
     }
     LOG(INFO) << "Storing data in l1Cache for address: " << address;
     l1Cache.insert(address, data);
+    memory.insert(address, new Node(address, data));
     LOG(INFO) << "Data stored in l1Cache for address: " << address;
+    LOG(INFO) << "Data stored in memory for address: " << address;
 }
 
 void Core::handleAddInstruction() {

@@ -1,7 +1,7 @@
 #include "processor.h"
 
-Processor::Processor(int pId, int numCores, int l1, int l2) :
-processorId(pId), numOfCores(numCores), l1CacheSize(l1), l2CacheSize(l2), l2Cache(Cache(l2)) {
+Processor::Processor(int pId, int numCores, int l1, int l2, Memory& memory) :
+processorId(pId), numOfCores(numCores), l1CacheSize(l1), l2CacheSize(l2), l2Cache(Cache(l2)), memory(memory) {
     LOG(INFO) << "Processor " << processorId << " initialized with " << numOfCores << " cores, L1 cache size: " << l1CacheSize << " and L2 cache size: " << l2CacheSize;
 }
 
@@ -20,7 +20,7 @@ void Processor::initializeCores() {
     LOG(INFO) << "Initializing cores for processor " << processorId;
     for (int i = 1; i <= numOfCores; i++) {
         LOG(INFO) << "Initializing core " << i;
-        cores.insert({i, std::shared_ptr<Core>(new Core(i, l1CacheSize, l2Cache))});
+        cores.insert({i, std::shared_ptr<Core>(new Core(i, l1CacheSize, l2Cache, memory))});
     }
 }
 

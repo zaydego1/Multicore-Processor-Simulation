@@ -25,7 +25,7 @@ bool Cache::lookup(std::string address) const {
 }
 
 std::string Cache::read(std::string address) {
-    std::lock_guard<std::mutex> lock(cacheMutex);
+    std::shared_lock<std::shared_mutex> lock(cacheMutex);
     if (!lookup(address)) return "";
 
     Node* node = cacheMap[address];
@@ -52,7 +52,7 @@ std::string Cache::read(std::string address) {
 }
 
 void Cache::insert(std::string address, const std::string& data) {
-    std::lock_guard<std::mutex> lock(cacheMutex);
+    std::unique_lock<std::shared_mutex> lock(cacheMutex);
     if (cacheMap.size() >= size) {
         Node::removeFromEnd(head, cacheMap); 
     }
@@ -72,7 +72,7 @@ void Cache::insert(std::string address, const std::string& data) {
 }
 
 void Cache::update(std::string address, const std::string& data) {
-    std::lock_guard<std::mutex> lock(cacheMutex);
+    std::unique_lock<std::shared_mutex> lock(cacheMutex);
     try {
         cacheMap.at(address);
         std::string oldData = cacheMap[address]->data;
@@ -86,7 +86,7 @@ void Cache::update(std::string address, const std::string& data) {
 }
 
 void Cache::remove(std::string address) {
-    std::lock_guard<std::mutex> lock(cacheMutex);
+    std::unique_lock<std::shared_mutex> lock(cacheMutex);
     try {
         cacheMap.at(address);
         Node* node = cacheMap[address];

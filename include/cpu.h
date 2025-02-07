@@ -14,10 +14,11 @@
 #include "core.h"
 #include "instructionQueue.h"
 #include "easylogging++.h"
+#include "memory.h"
 
 class CPU {
 public:
-    CPU(int numOfProcessors, int numOfCores, int l1CacheSize, int l2CacheSize); 
+    CPU(int numOfProcessors, int numOfCores, int l1CacheSize, int l2CacheSize, Memory& memory); 
 
     std::unordered_map<int, std::shared_ptr<Processor>> processors;
 
@@ -30,6 +31,7 @@ private:
     int l2CacheSize;  // Size of the L2 cache
     int numOfCores;  // Number of cores in each processor
     int numOfProcessors;  // Number of processors in the system
+    Memory& memory;
     void initializeProcessors();
 };
 

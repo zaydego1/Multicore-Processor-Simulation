@@ -80,6 +80,7 @@
         "chrono": "cpp",
         "forward_list": "cpp",
         "iomanip": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "shared_mutex": "cpp"
     }
 }

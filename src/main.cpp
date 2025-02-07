@@ -1,5 +1,6 @@
 #define ELPP_IMPLEMENTATION 
 #include "easylogging++.h"
+#include "memory.h"
 #include "cpu.h"
 
 INITIALIZE_EASYLOGGINGPP  // Macro to initialize the logger
@@ -25,11 +26,12 @@ int main() {
     LOG(INFO) << "The program outputs the cache and memory states after each instruction execution.";
 
     LOG(INFO) << "Initializing processor simulation... ";
+    Memory memory = Memory();
     int processors = 2;
     int cores = 4;
     int l1CacheSize = 10;
     int l2CacheSize = 20;
-    CPU cpu(processors, cores, l1CacheSize, l2CacheSize);
+    CPU cpu(processors, cores, l1CacheSize, l2CacheSize, memory);
     LOG(INFO) << "Processor simulation initialized.";
 
     std::vector<std::string> instructions = {
