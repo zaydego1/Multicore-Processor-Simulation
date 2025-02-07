@@ -12,6 +12,9 @@ set(SOURCES
     src/cache.cpp
     src/processor.cpp
     src/node.cpp
+    src/core.cpp
+    src/cpu.cpp
+    src/memory.cpp
 )
 #Add the header files for the project 
 set(HEADERS
@@ -20,6 +23,11 @@ set(HEADERS
     include/node.h
     include/easylogging++.h
     include INSTRUCTION_ENUM.h
+    include/core.h
+    include/cpu.h
+    include/memStack.h
+    include/instructionQueue.h
+    include/memory.h
 )
 
 
