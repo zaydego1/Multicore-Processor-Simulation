@@ -1,18 +1,17 @@
 #include "cache.h"
 #include "node.h"
 
-Cache::Cache(int& size) : size(size), head(nullptr), cacheMap(std::unordered_map<std::string, Node*>()) {
+Cache::Cache(int size) : size(size), head(nullptr), cacheMap(std::unordered_map<std::string, Node*>()) {
     LOG(INFO) << "Cache initialized with size: " << size;
 }
 
-Cache::~Cache() {
-    Node* curr = head;
-    while (curr) {
-        Node* temp = curr;
-        curr = curr->next;
-        delete temp;
-    }
-    cacheMap.clear();
+Cache::Cache() : size(0), head(nullptr), cacheMap(std::unordered_map<std::string, Node*>()) {
+    LOG(INFO) << "Cache initialized with default size";
+}
+
+
+void Cache::setSize(int size) {
+    this->size = size;
 }
 
 bool Cache::lookup(std::string address) const {

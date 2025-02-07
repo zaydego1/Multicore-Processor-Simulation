@@ -10,11 +10,12 @@
 #include "cache.h"
 #include "instructionQueue.h"
 
-class Core
-{
+class Core{
 public:
-    Core(int coreId, int l1CacheSize, Cache &l2Cache);
+    Core(int id, int l1, Cache& l2);
+    int l1CacheSize;
     int coreId;
+    Cache& l2Cache;
 
     bool isReady();
     void executeInstruction(const std::string &instruction);
@@ -23,7 +24,6 @@ public:
 private:
     bool readyForInstruction;
     Cache l1Cache;
-    Cache &l2Cache;
 
     /**
      * Handles the LOAD instruction by fetching data from the

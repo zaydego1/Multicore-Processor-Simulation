@@ -18,12 +18,12 @@ class Cache {
         * 
         * @param size The size of the cache.
         */ 
-        Cache(int& size);
+        Cache(int size);
 
-        /**
-        * @brief Destroy the Cache object and release any allocated resources.
-        */
-        ~Cache();
+        Cache();
+
+        void setSize(int size);
+
 
         /**
         * @brief Check if the given address is present in the cache.
@@ -66,6 +66,7 @@ class Cache {
          * @param address The address of the cache entry to be removed.
          */
         void remove(std::string address);
+        
 
         /**
         * @brief Display the contents of the cache.
@@ -74,7 +75,7 @@ class Cache {
 
 
     private:
-        int& size; //size of the cache
+        int size; //size of the cache
         Node* head; //pointer to the head of the linked list
         std::mutex cacheMutex; //mutex to protect cache operations
         std::unordered_map<std::string, Node*> cacheMap; //map to store cache entries

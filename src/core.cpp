@@ -1,9 +1,8 @@
 #include "core.h"
 
-Core::Core(int coreId, int l1CacheSize, Cache& l2Cache) 
-    : coreId(coreId), l1Cache(Cache(l1CacheSize)), l2Cache(l2Cache), readyForInstruction(true) {
-    LOG(INFO) << "Core " << coreId << " initialized";
-}
+Core::Core(int id, int l1, Cache& l2) 
+    : coreId(id), l1CacheSize(l1), l1Cache(l1CacheSize), l2Cache(l2),
+    readyForInstruction(true) {}
 
 bool Core::isReady() {
     return readyForInstruction;
@@ -20,22 +19,26 @@ void Core::executeInstruction(const std::string& instruction) {
     switch (operation) {
         case LOAD:
             handleLoadInstruction(tokens);
+            readyForInstruction = true;
             break;
         case STORE:
             handleStoreInstruction(tokens);
+            readyForInstruction = true;
             break;
         case ADD:
             handleAddInstruction();
             LOG(INFO) << "ADD operation";
+            readyForInstruction = true;
             break;
         case INVALID:
             LOG(WARNING) << "Invalid instruction: " << instruction;
+            readyForInstruction = true;
             break;
         default:
             LOG(ERROR) << "Unknown instruction: " << operation << " " << instruction; 
+            readyForInstruction = true;
             break;
 
-        readyForInstruction = true;
     }
 }
 

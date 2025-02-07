@@ -17,7 +17,8 @@ void CPU::run() {
     initializeProcessors();
 
     for (auto& processor : processors) {
-        processor.second->run();
+        std::shared_ptr<Processor> processorPtr = processor.second;
+        processorPtr->run();
     }
 
     auto end = std::chrono::high_resolution_clock::now();
@@ -35,10 +36,8 @@ void CPU::loadInstructionQueue(std::vector<std::string>& instructions) {
 }
 
 void CPU::initializeProcessors() {
-    processors = std::unordered_map<int, std::unique_ptr<Processor>>();
     for (int i = 1; i <= numOfProcessors; ++i) {
         LOG(INFO) << "Initializing processor " << i;
-        Processor processor = Processor(i, numOfCores, l1CacheSize, l2CacheSize);
-        processors.insert({i, std::unique_ptr<Processor>(&processor)});
+        processors.insert({i, std::shared_ptr<Processor>(new Processor(i, numOfCores, l1CacheSize, l2CacheSize))});
     }
 }

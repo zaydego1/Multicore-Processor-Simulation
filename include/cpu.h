@@ -10,6 +10,8 @@
 #include <memory>
 
 #include "processor.h"
+#include "cache.h"
+#include "core.h"
 #include "instructionQueue.h"
 #include "easylogging++.h"
 
@@ -17,7 +19,7 @@ class CPU {
 public:
     CPU(int numOfProcessors, int numOfCores, int l1CacheSize, int l2CacheSize); 
 
-    std::unordered_map<int, std::unique_ptr<Processor>> processors;
+    std::unordered_map<int, std::shared_ptr<Processor>> processors;
 
     void run();
     void loadInstructionQueue(std::vector<std::string>& instructions);

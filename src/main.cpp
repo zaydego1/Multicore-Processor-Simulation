@@ -25,7 +25,11 @@ int main() {
     LOG(INFO) << "The program outputs the cache and memory states after each instruction execution.";
 
     LOG(INFO) << "Initializing processor simulation... ";
-    CPU cpu(2, 4, 10, 20);
+    int processors = 2;
+    int cores = 4;
+    int l1CacheSize = 10;
+    int l2CacheSize = 20;
+    CPU cpu(processors, cores, l1CacheSize, l2CacheSize);
     LOG(INFO) << "Processor simulation initialized.";
 
     std::vector<std::string> instructions = {

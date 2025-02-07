@@ -1,17 +1,13 @@
 #include "processor.h"
 
-Processor::Processor(int& processorId, int& numOfCores, int& l1CacheSize, int& l2CacheSize):
-    processorId(processorId),
-    numOfCores(numOfCores),
-    l1CacheSize(l1CacheSize),
-    l2CacheSize(l2CacheSize),
-    l2Cache(Cache(l2CacheSize)) {
-    LOG(INFO) << "Processor " << processorId << " initialized";
+Processor::Processor(int pId, int numCores, int l1, int l2) :
+processorId(pId), numOfCores(numCores), l1CacheSize(l1), l2CacheSize(l2), l2Cache(Cache(l2)) {
+    LOG(INFO) << "Processor " << processorId << " initialized with " << numOfCores << " cores, L1 cache size: " << l1CacheSize << " and L2 cache size: " << l2CacheSize;
 }
 
 void Processor::run() {
     LOG(INFO) << "Processor " << processorId << " is running...";
-    initializeCores(numOfCores, l1CacheSize, l2Cache);
+    initializeCores();
     InstructionQueue& instructionQueue = InstructionQueue::getInstance();
     LOG(INFO) << "Processor " << processorId << " is fetching and executing instructions...";
     while (!instructionQueue.isEmpty()) {
@@ -20,15 +16,16 @@ void Processor::run() {
     }
 }
 
-void Processor::initializeCores(const int& numOfCores, const int& l1CacheSize, Cache& l2Cache) {
-
+void Processor::initializeCores() {
     LOG(INFO) << "Initializing cores for processor " << processorId;
-    for (int i = 0; i < numOfCores; i++) {
+    for (int i = 1; i <= numOfCores; i++) {
         LOG(INFO) << "Initializing core " << i;
-        Core core = Core(i, l1CacheSize, l2Cache);
-        Core* corePtr = &core;
-        cores.push_back(corePtr);
+        cores.insert({i, std::shared_ptr<Core>(new Core(i, l1CacheSize, l2Cache))});
     }
+}
+
+Cache& Processor::getL2Cache() {
+    return this->l2Cache;
 }
 
 std::string Processor::fetchInstruction() {
@@ -45,9 +42,10 @@ void Processor::scheduleInstruction(const std::string& instruction, int retryCou
     }
 
     for (auto& core : cores) {
-        LOG(INFO) << "Attempting to schedule instruction: " << instruction << " on core: " << core->coreId;
-        if (core->isReady()) {
-            core->executeInstruction(instruction);
+        std::shared_ptr<Core> corePtr = core.second;
+        LOG(INFO) << "Checking if core " << corePtr->isReady() << " is ready to execute instruction: " << instruction;
+        if (corePtr->isReady()) {
+            corePtr->executeInstruction(instruction);
             return;
         }
 }   LOG(INFO) << "No cores available to execute instruction: " << instruction << " retrying: Attempt: " << retryCount;
