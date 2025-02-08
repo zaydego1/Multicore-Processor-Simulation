@@ -2,6 +2,7 @@
 #include "easylogging++.h"
 #include "memory.h"
 #include "cpu.h"
+#include "memStack.h"
 
 INITIALIZE_EASYLOGGINGPP  // Macro to initialize the logger
 
@@ -44,11 +45,14 @@ int main() {
         "STORE 0x4000 10",
         "LOAD 0x4000",
         "STORE 0x5000 11",
-        "LOAD 0x5000"
+        "LOAD 0x5000",
+        "ADD 0x6000",
+        "LOAD 0x6000"
     };
 
     cpu.loadInstructionQueue(instructions);
     cpu.run();
+    LOG(INFO) << MemStack::getInstance().top();
 
     return 0;
 }

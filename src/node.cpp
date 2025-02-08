@@ -3,7 +3,7 @@
 #include "easylogging++.h"
 
 Node::Node(const std::string& addr, const std::string& d)
-: data(data), address(address), prev(nullptr), next(nullptr) {}
+: data(d), address(addr), prev(nullptr), next(nullptr) {}
 
 void Node::removeFromEnd(Node*& head, std::unordered_map<std::string, Node*>& cacheMap) {
     if (!head) return;
