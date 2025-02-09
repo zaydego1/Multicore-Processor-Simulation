@@ -41,7 +41,7 @@
 6. **`node.cpp`**:
    - Used a part of memory storage
    - Implemented as doubly linked list with pointers to address and data
-   - Built in remove from end operation
+   - Built in remove from end operation (used for LRU Cache)
 
 7. **`main.cpp`**:
    - Responsible for initializing CPU and main memory
