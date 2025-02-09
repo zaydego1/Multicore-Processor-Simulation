@@ -12,10 +12,14 @@
 
 ### Breakdown of Components:
 
-1. **`cpu.cpp`**:
+0. **`cpu.cpp`**:
    - Initializes processors
    - Creates the instruction queue
 
+1. **`task_manager.cpp`**:
+   - Handles the scheduling of the CPU
+   - Threaded instances of processor (therefore including core classes)
+   - My favorite class! This is the bread and butter of this program
 
 2. **`processor.cpp`**:
    - Creates cores
