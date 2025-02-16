@@ -3,7 +3,7 @@
 ### How to Build ###
 
 1. Install an IDE compatible with C++.
-2. Install a C++ compiler (clang, Visual Studio(also install msys with mingwin32), g++).
+2. Install a C++ compiler (clang, Visual Studio(also install msys with mingwin32)).
 3. Install CMake.
 4. Add all of these downloads to path (as needed).
 5. Clone repository.
@@ -17,19 +17,17 @@
    - Creates the instruction queue
 
 1. **`task_manager.cpp`**:
-   - Handles the scheduling of the CPU
-   - Threaded instances of processor (therefore including core classes)
-   - My favorite class! This is the bread and butter of this program
+   - Out of scope for this project. (Didn't need to multithread instructions)
 
 2. **`processor.cpp`**:
    - Creates cores
    - Creates L2 Cache
-   - Currently responsible for scheduling instructions (will be handled by task manager in the future) 
+   - Currently responsible for scheduling instructions 
 
 3. **`core.cpp`**:
    - Executes instructions in a thread safe manner
    - Creates L1 Caches and interfaces with L2 Caches and Memory
-   - Collaborates with processor to schedule instructions (will be task manager)
+   - Collaborates with processor to schedule instructions 
 
 4. **`cache.cpp`**:
    - Interface for creating L1 and L2 caches
