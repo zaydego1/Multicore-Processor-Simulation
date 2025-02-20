@@ -119,6 +119,7 @@ void Core::handleAddInstruction(const std::vector<std::string>& tokens) {
         int result = std::stoi(operand1) + std::stoi(operand2);
         LOG(INFO) << "ADD operation result: " << result;
         l1Cache.insert(address, std::to_string(result));
+        memory.insert(address, new Node(address, std::to_string(result)));
         memStack.push(std::to_string(result));
     } catch (const std::invalid_argument& e) {
         LOG(ERROR) << "Invalid argument for ADD operation: " << e.what();
