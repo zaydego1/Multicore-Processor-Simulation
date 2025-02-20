@@ -42,11 +42,11 @@ int main() {
         "LOAD 0x2000",
         "STORE 0x3000 9",
         "LOAD 0x3000",
-        "STORE 0x4000 10",
+        "STORE 0x4000 0",
         "LOAD 0x4000",
-        "STORE 0x5000 11",
+        "STORE 0x5000 10",
         "LOAD 0x5000",
-        "ADD 0x6000",
+        "DIV 0x6000",
         "LOAD 0x6000"
     };
 

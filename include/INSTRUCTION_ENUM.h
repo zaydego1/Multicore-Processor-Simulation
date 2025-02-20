@@ -12,6 +12,9 @@ enum InstructionEnum {
     LOAD,
     STORE,
     ADD,
+    SUB,
+    MUL,
+    DIV,
     INVALID
 };
 
@@ -25,7 +28,10 @@ static InstructionEnum stringToInstruction(const std::string& str) {
     static const std::unordered_map<std::string, InstructionEnum> stringToEnumMap = {
         {"LOAD",  LOAD},
         {"STORE", STORE},
-        {"ADD", ADD}
+        {"ADD", ADD},
+        {"SUB", SUB},
+        {"MUL", MUL},
+        {"DIV", DIV}
     };
 
     auto it = stringToEnumMap.find(str);

@@ -28,6 +28,21 @@ void Core::executeInstruction(const std::string& instruction) {
             handleAddInstruction(tokens);
             readyForInstruction = true;
             break;
+        case SUB: 
+            handleSubInstruction(tokens); 
+            LOG(INFO) << "SUB operation";
+            readyForInstruction = true;
+            break;
+        case MUL: 
+            handleMulInstruction(tokens); 
+            LOG(INFO) << "MUL operation";
+            readyForInstruction = true; 
+            break;
+        case DIV:
+            handleDivInstruction(tokens); 
+            LOG(INFO) << "DIV operation"; 
+            readyForInstruction = true;
+            break;
         case INVALID:
             LOG(WARNING) << "Invalid instruction: " << instruction;
             readyForInstruction = true;
@@ -127,6 +142,96 @@ void Core::handleAddInstruction(const std::vector<std::string>& tokens) {
         LOG(ERROR) << "Out of range error for ADD operation: " << e.what();
     }
 }
+
+void Core::handleSubInstruction(const std::vector<std::string> &tokens) { 
+    MemStack& memStack = MemStack::getInstance(); 
+    if (memStack.size() < 2) {
+        LOG(ERROR) << "SUB operation requires at least two operands"; 
+        return; 
+    }
+
+    if (tokens.size() < 2) { 
+        LOG(ERROR) << "Invalid SUB instruction, missing memory address"; 
+        return; 
+    }
+
+    std::string address = tokens[1]; 
+    std::string operand1 = memStack.pop(); 
+    std::string operand2 = memStack.pop(); 
+
+    try { 
+        int result = std::stoi(operand1) - std::stoi(operand2); 
+        LOG(INFO) << "SUB operation result: " << result; 
+        l1Cache.insert(address, std::to_string(result));
+        memory.insert(address, new Node(address, std::to_string(result))); 
+        memStack.push(std::to_string(result));
+    } catch (const std::invalid_argument& e) { 
+        LOG(ERROR) << "Invalid argument for SUB operation: " << e.what(); 
+    } catch (const std::out_of_range& e) { 
+        LOG(ERROR) << "Out of range error for SUB operation: " << e.what(); 
+    }
+}
+
+void Core::handleMulInstruction(const std::vector<std::string> &tokens) { 
+    MemStack& memStack = MemStack::getInstance(); 
+    if(memStack.size() < 2) { 
+        LOG(ERROR) << "MUL operation requires at least two operands"; 
+        return; 
+    }
+
+    std::string address = tokens[1]; 
+    std::string operand1 = memStack.pop(); 
+    std::string operand2 = memStack.pop(); 
+
+    try { 
+        int result = std::stoi(operand1) * std::stoi(operand2); 
+        LOG(INFO) << "MUL operation result: " << result; 
+        l1Cache.insert(address, std::to_string(result)); 
+        memory.insert(address, new Node(address, std::to_string(result))); 
+        memStack.push(std::to_string(result)); 
+    } catch (const std::invalid_argument& e) { 
+        LOG(ERROR) << "Invalid argument for MUL operation: " << e.what();
+    } catch (const std::out_of_range& e) { 
+        LOG(ERROR) << "Out of range error for MUL operation: " << e.what();  
+    }
+}
+
+void Core::handleDivInstruction(const std::vector<std::string> &tokens) { 
+    MemStack& memStack = MemStack::getInstance(); 
+    if(memStack.size() < 2) { 
+        LOG(ERROR) << "DIV operation requires at least two operations"; 
+        return; 
+    }
+
+    std::string address = tokens[1];
+    int divisor = std::stoi(memStack.pop());
+    int dividend = std::stoi(memStack.pop());
+
+
+
+    try { 
+
+        if(dividend == 0) {
+            memStack.push(std::to_string(dividend)); 
+            memStack.push(std::to_string(divisor)); 
+            throw std::overflow_error("Divison by zero error"); 
+        }
+
+        int result = divisor / dividend; 
+        LOG(INFO) << "DIV operation result: " << result; 
+        l1Cache.insert(address, std::to_string(result)); 
+        memory.insert(address, new Node(address, std::to_string(result)));
+        memStack.push(std::to_string(result)); 
+    } catch (const std::invalid_argument& e) { 
+        LOG(ERROR) << "Invalid argument for DIV operation: " << e.what(); 
+    } catch (const std::out_of_range& e) { 
+        LOG(ERROR) << "Out of range error for DIV operation: " << e.what();
+    } catch(const std::overflow_error& e) { 
+        LOG(ERROR) << e.what(); 
+    }
+}
+
+
 
 void Core::displayCacheState() const {
     LOG(INFO) << "Displaying cache state for Core " << coreId;
