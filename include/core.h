@@ -26,6 +26,7 @@ private:
     Cache* l2Cache;
     Cache l1Cache;
     Memory& memory;
+    std::mutex mtx;
 
     void handleLoadInstruction(const std::vector<std::string> &tokens);
     void handleStoreInstruction(const std::vector<std::string> &tokens);

@@ -8,7 +8,6 @@ bool Core::isReady() {
 }
 
 void Core::executeInstruction(const std::string& instruction) {
-    readyForInstruction = false;
     LOG(INFO) << "Core " << coreId << " executing instruction: " << instruction;
 
     std::istringstream iss(instruction);

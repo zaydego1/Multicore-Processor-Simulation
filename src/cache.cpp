@@ -19,18 +19,18 @@ bool Cache::lookup(std::string address) const {
         cacheMap.at(address);
         return true;
     } catch (const std::out_of_range& e) {
-        LOG(INFO) << "Cache miss at address: " << address;
+        LOG(INFO) << "Nothing found in cache at address:  " << address;
     }
     return false;
 }
 
 std::string Cache::read(std::string address) {
     std::shared_lock<std::shared_mutex> lock(cacheMutex);
-    if (!lookup(address)) return "";
 
     Node* node = cacheMap[address];
     if (!node || node->data.empty()) {
-        cacheMap.erase(address);  // Remove invalid entry
+        LOG(INFO) << "Node not found or empty at address: " << address << ". Removing node...";
+        cacheMap.erase(address); 
         delete node;
         return "";
     }
@@ -54,6 +54,7 @@ std::string Cache::read(std::string address) {
 void Cache::insert(std::string address, const std::string& data) {
     std::unique_lock<std::shared_mutex> lock(cacheMutex);
     if (cacheMap.size() >= size) {
+        LOG(INFO) << "Cache is full. Removing least recently used node...";
         Node::removeFromEnd(head, cacheMap); 
     }
 
@@ -69,6 +70,7 @@ void Cache::insert(std::string address, const std::string& data) {
     newNode->next = head;
     if (head) head->prev = newNode;
     head = newNode;
+    LOG(INFO) << "Node inserted at address: " << address << " with data: " << data;
 }
 
 void Cache::update(std::string address, const std::string& data) {

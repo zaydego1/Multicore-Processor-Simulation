@@ -1,5 +1,4 @@
 #include "cpu.h"
-#include "processor.h"
 
 CPU::CPU(int numOfProcessors, int numOfCores, int l1CacheSize, int l2CacheSize, Memory& memory) :
     numOfProcessors(numOfProcessors), numOfCores(numOfCores), l1CacheSize(l1CacheSize), l2CacheSize(l2CacheSize), memory(memory) {}
@@ -18,7 +17,7 @@ void CPU::run() {
         std::shared_ptr<Processor> processorPtr = processor.second;
         processorPtr->run();
     }
-
+    
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     LOG(INFO) << "CPU has finished executing all instructions in " << elapsed.count() << " seconds.";
