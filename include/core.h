@@ -31,6 +31,9 @@ private:
     void handleLoadInstruction(const std::vector<std::string> &tokens);
     void handleStoreInstruction(const std::vector<std::string> &tokens);
     void handleAddInstruction(const std::vector<std::string> &tokens);
+    void handleSubInstruction(const std::vector<std::string> &tokens); 
+    void handleMulInstruction(const std::vector<std::string> &tokens); 
+    void handleDivInstruction(const std::vector<std::string> &tokens); 
 };
 
 #endif // CORE_H

@@ -40,7 +40,7 @@ add_definitions(-DELPP_NO_DEFAULT_LOG_FILE)
 add_executable(MulticoreProcessorSimulation ${SOURCES} src/main.cpp lib/easylogging++.cc)
 
 #Include directories for header files
-add_subdirectory(extern/easyloggingpp)
+add_subdirectory(external/easyloggingpp)
 target_include_directories(MulticoreProcessorSimulation PRIVATE include)
 
 #optional: Enable debug symbols for debuggin
