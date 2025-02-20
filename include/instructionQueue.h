@@ -41,10 +41,16 @@ public:
         }
         return queue.front();
     }
+    
+    // Get the size of the queue
+    size_t size() {
+        std::lock_guard<std::mutex> lock(mtx);
+        return queue.size();
+    }
 
 private:
     // Private constructor to prevent instantiation
-    InstructionQueue() {}
+    InstructionQueue() = default;
 
     // Delete copy constructor and assignment operator
     InstructionQueue(const InstructionQueue&) = delete;

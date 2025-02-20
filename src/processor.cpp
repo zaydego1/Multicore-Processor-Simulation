@@ -1,7 +1,7 @@
 #include "processor.h"
 
 Processor::Processor(int pId, int numCores, int l1, int l2, Memory& memory) :
-processorId(pId), numOfCores(numCores), l1CacheSize(l1), l2CacheSize(l2), l2Cache(Cache(l2)), memory(memory) {
+processorId(pId), numOfCores(numCores), l1CacheSize(l1), l2CacheSize(l2), l2Cache(new Cache(l2)), memory(memory) {
     LOG(INFO) << "Processor " << processorId << " initialized with " << numOfCores << " cores, L1 cache size: " << l1CacheSize << " and L2 cache size: " << l2CacheSize;
 }
 
@@ -24,10 +24,6 @@ void Processor::initializeCores() {
     }
 }
 
-Cache& Processor::getL2Cache() {
-    return this->l2Cache;
-}
-
 std::string Processor::fetchInstruction() {
     InstructionQueue& instructionQueue = InstructionQueue::getInstance();
     std::string instruction = instructionQueue.peek();
@@ -43,7 +39,7 @@ void Processor::scheduleInstruction(const std::string& instruction, int retryCou
 
     for (auto& core : cores) {
         std::shared_ptr<Core> corePtr = core.second;
-        LOG(INFO) << "Checking if core " << corePtr->isReady() << " is ready to execute instruction: " << instruction;
+        LOG(INFO) << "Checking if core " << corePtr->coreId << " is ready to execute instruction: " << instruction;
         if (corePtr->isReady()) {
             corePtr->executeInstruction(instruction);
             return;

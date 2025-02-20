@@ -21,13 +21,12 @@ class Processor {
 
         void run();
         std::string fetchInstruction();
-        Cache& getL2Cache();
 
     private:
         int numOfCores;                          
         int l1CacheSize;                
         int l2CacheSize;                 
-        Cache l2Cache;                 
+        Cache* l2Cache;                 
         Memory& memory;         
         std::unordered_map<int, std::shared_ptr<Core>> cores;
 

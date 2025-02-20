@@ -42,6 +42,14 @@ public:
         return stack_.size();
     }
 
+    std::string top() const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        if (stack_.empty()) {
+            return "";
+        }
+        return stack_.top();
+    }
+
 private:
     // Private constructor to prevent instantiation
     MemStack() {}
