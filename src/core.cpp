@@ -29,18 +29,18 @@ void Core::executeInstruction(const std::string& instruction) {
             readyForInstruction = true;
             break;
         case SUB: 
+            LOG(INFO) << "SUB operation";   
             handleSubInstruction(tokens); 
-            LOG(INFO) << "SUB operation";
             readyForInstruction = true;
             break;
         case MUL: 
+             LOG(INFO) << "MUL operation";
             handleMulInstruction(tokens); 
-            LOG(INFO) << "MUL operation";
             readyForInstruction = true; 
             break;
         case DIV:
-            handleDivInstruction(tokens); 
             LOG(INFO) << "DIV operation"; 
+            handleDivInstruction(tokens); 
             readyForInstruction = true;
             break;
         case INVALID:
