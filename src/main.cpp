@@ -40,14 +40,24 @@ int main() {
         "LOAD 0x1000",
         "STORE 0x2000 8",
         "LOAD 0x2000",
-        "STORE 0x3000 9",
-        "LOAD 0x3000",
-        "STORE 0x4000 10",
+        "ADD 0x3000",
+        "STORE 0x4000 9",
         "LOAD 0x4000",
-        "STORE 0x5000 11",
+        "STORE 0x5000 10",
         "LOAD 0x5000",
-        "ADD 0x6000",
-        "LOAD 0x6000"
+        "SUB 0x6000",
+        "STORE 0x7000 10",
+        "LOAD 0x7000",
+        "STORE 0x8000 10",
+        "LOAD 0x8000",
+        "DIV 0x9000",
+        "LOAD 0x9000",
+        "STORE 0x7001 10",
+        "LOAD 0x7001",
+        "STORE 0x8001 10",
+        "LOAD 0x8001",
+        "MUL 0x9001",
+        "LOAD 0x9001"
     };
 
     cpu.loadInstructionQueue(instructions);

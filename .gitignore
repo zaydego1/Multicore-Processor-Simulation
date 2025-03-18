@@ -1,3 +1,5 @@
 /build/
 /extern/
-.vscode/
+/external/
+/.vscode/
+/.vscode
